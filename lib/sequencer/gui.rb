@@ -1,19 +1,16 @@
 class Sequencer
   module Gui
-    def record
-      @record_button.hide
-      @stop_button.show
-    end
-
-    def stop_recording
-      @stop_button.hide
-      @record_button.show
-    end
-
     Shoes.app(width: 300, height: 400) do
       stack margin: 20 do
-        @record_button = button('Record') { record }
-        @stop_button = button('Stop') { stop_recording }
+        @record_button = button('Record') do
+          @record_button.hide
+          @stop_button.show
+        end
+
+        @stop_button = button('Stop') do
+          @stop_button.hide
+          @record_button.show
+        end
 
         @progress = progress(width: 1.0)
       end
