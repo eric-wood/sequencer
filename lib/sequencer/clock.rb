@@ -6,9 +6,17 @@ class Sequencer
 
       loop do
         Thread.current[:notes].each do |note|
-          @@output.puts(0x90, note[1], note[2])
+          unless DEBUG
+            @@output.puts(0x90, note[1], note[2])
+          else
+            puts "Out: #{note[1]}"
+          end
+
           sleep(Thread.current[:delay])
-          @@output.puts(0x80, note[1], note[2])
+
+          unless DEBUG
+            @@output.puts(0x80, note[1], note[2])
+          end
         end
       end
     end
