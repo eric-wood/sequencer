@@ -1,5 +1,4 @@
 # Sequencer
-- - -
 
 A dead simple little MIDI sequencer to keep Eric from buying more music equipment he doesn't need.
 
