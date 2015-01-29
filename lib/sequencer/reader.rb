@@ -2,16 +2,18 @@ class Sequencer
   class Reader
     attr_reader :notes
 
-    def initialize(input)
-      @input = input
+    def initialize(input=nil)
+      @input ||= UniMIDI::Input.use(:first)
+      @notes = []
     end
 
     def start
       @notes = []
-      create_thread
+      @thread = create_thread
     end
 
     def stop
+      @notes = @thread[:notes]
       Thread.kill(@thread)
       return @notes
     end
@@ -23,10 +25,15 @@ class Sequencer
     end
 
     def create_thread
-      @thread = Thread.new do 
+      Thread.new do 
+        Thread.current[:notes] = []
+
         loop do
-          note = @input.gets
-          notes << note if is_key_on?(note)
+          note = @input.gets.first
+
+          if is_key_on?(note)
+            Thread.current[:notes] << note
+          end
         end
       end
     end

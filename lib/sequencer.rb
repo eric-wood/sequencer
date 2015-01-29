@@ -1,18 +1,16 @@
+require 'pry'
 require 'unimidi'
 require_relative 'sequencer/clock'
 require_relative 'sequencer/reader'
 
 class Sequencer
   def initialize
-    # TODO: make these configurable
-    @input = UniMIDI::Input.use(:first)
-    @output = UniMIDI::Output.use(:first)
-
     @notes = []
-    @clock = Clock.new(@output, notes: @notes)
+    @clock = Clock.new(notes: @notes)
     @recording = true
-    @reader = Reader.new(@input)
-    @reader.start
+    @reader = Reader.new
+
+    start_recording
 
     # main loop!
     loop do
@@ -34,7 +32,6 @@ class Sequencer
 
   def stop_recording
     @notes = @reader.stop
-    p @notes
     @clock.set_notes(@notes)
     @clock.start
   end

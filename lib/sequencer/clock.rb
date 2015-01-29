@@ -1,11 +1,11 @@
 class Sequencer
   class Clock
-    def initialize(output, notes: [], paused: true, bpm: 120)
-      @output = output
+    def initialize(notes: [], paused: true, bpm: 120)
+      @output = UniMIDI::Output.use(:first)
       @notes = notes
       @paused = paused
       @bpm = bpm
-      create_thread
+      @thread = create_thread
     end
 
     def start
@@ -23,22 +23,28 @@ class Sequencer
     private
 
     def create_thread
-      @thread = Thread.new do
-        Thread.current[:bpm] = @bpm
-        Thread.current[:notes] = @notes
-        Thread.current[:paused] = true
+      Thread.new do
+        begin
+          Thread.current[:bpm] = @bpm
+          Thread.current[:notes] = @notes
+          Thread.current[:paused] = true
 
-        loop do
-          continue if Thread.current[:paused]
+          loop do
+            continue if Thread.current[:paused]
+            puts "woot"
 
-          Thread.current[:notes].each do |note|
-            @output.puts(0x90, note[1], note[2])
-            puts "Out: #{note}"
+            Thread.current[:notes].each do |note|
+              @output.puts(0x90, note[1], note[2])
+              puts "Out: #{note}"
 
-            sleep(Thread.current[:delay])
+              sleep(Thread.current[:delay])
 
-            @output.puts(0x80, note[1], note[2])
+              @output.puts(0x80, note[1], note[2])
+            end
           end
+        rescue e
+          puts "DANGER DANGER"
+          puts e
         end
       end
     end
