@@ -1,24 +1,57 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    after_do (0.3.1)
     alsa-rawmidi (0.3.1)
       ffi (~> 1.0)
     ffi (1.9.6-java)
     ffi-coremidi (0.3.7)
       ffi (~> 1.9, >= 1.9.6)
+    furoshiki (0.3.0)
+      plist
+      rubyzip (>= 1.0.0)
+      warbler (~> 1.4.4)
+    jruby-jars (1.7.18)
+    jruby-rack (1.1.18)
     midi-jruby (0.1.4)
     midi-winmm (0.1.10)
       ffi (>= 1.0)
-    shoes (3.0.1)
+    nokogiri (1.6.4.1-java)
+    plist (3.1.0)
+    rake (10.4.2)
+    rubyzip (1.1.6)
+    shoes (4.0.0.pre3)
+      shoes-core (= 4.0.0.pre3)
+      shoes-manual (~> 4.0.0, >= 4.0.0)
+      shoes-swt (= 4.0.0.pre3)
+    shoes-core (4.0.0.pre3)
+    shoes-highlighter (1.0.0)
+    shoes-manual (4.0.0)
+      nokogiri (~> 1.6.4.1, >= 1.6.4.1)
+      shoes-highlighter (~> 1.0, >= 1.0.0)
+    shoes-package (4.0.0.pre3)
+      furoshiki (~> 0.3.0)
+      shoes-core (= 4.0.0.pre3)
+    shoes-swt (4.0.0.pre3)
+      after_do (~> 0.3)
+      shoes-core (= 4.0.0.pre3)
+      shoes-package (= 4.0.0.pre3)
+      swt (~> 4.4)
+    swt (4.4)
     unimidi (0.4.6)
       alsa-rawmidi (~> 0.3, >= 0.3.1)
       ffi-coremidi (~> 0.3, >= 0.3.5)
       midi-jruby (~> 0.1, >= 0.1.4)
       midi-winmm (~> 0.1, >= 0.1.10)
+    warbler (1.4.4)
+      jruby-jars (>= 1.5.6, < 2.0)
+      jruby-rack (>= 1.0.0)
+      rake (>= 0.9.6)
+      rubyzip (>= 0.9, < 1.2)
 
 PLATFORMS
   java
 
 DEPENDENCIES
-  shoes
+  shoes (>= 4.0.0.pre3)
   unimidi

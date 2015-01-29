@@ -1,22 +1,46 @@
 class Sequencer
-  module Clock
-    @@timing_thread = Thread.new do
-      Thread.current[:delay] = 0.1
-      Thread.current[:notes] ||= []
-      Thread.current[:paused] = true
+  class Clock
+    def initialize(output, notes: [], paused: true, bpm: 120)
+      @output = output
+      @notes = notes
+      @paused = paused
+      @bpm = bpm
+      create_thread
+    end
 
-      loop do
-        Thread.current[:notes].each do |note|
-          #@@output.puts(0x90, note[1], note[2])
-          puts "Out: #{note}"
+    def start
+      @thread[:paused] = false
+    end
 
-          sleep(Thread.current[:delay])
+    def stop
+      @thread[:paused] = true
+    end
 
-          #@@output.puts(0x80, note[1], note[2])
+    def set_notes(notes)
+      @thread[:notes] = notes
+    end
+
+    private
+
+    def create_thread
+      @thread = Thread.new do
+        Thread.current[:bpm] = @bpm
+        Thread.current[:notes] = @notes
+        Thread.current[:paused] = true
+
+        loop do
+          continue if Thread.current[:paused]
+
+          Thread.current[:notes].each do |note|
+            @output.puts(0x90, note[1], note[2])
+            puts "Out: #{note}"
+
+            sleep(Thread.current[:delay])
+
+            @output.puts(0x80, note[1], note[2])
+          end
         end
       end
     end
-
-    @@timing_thread[:notes] = [[1,2],[3,4]]
   end
 end
