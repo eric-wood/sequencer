@@ -5,46 +5,52 @@ class Sequencer
       @notes = notes
       @paused = paused
       @bpm = bpm
-      @thread = create_thread
     end
 
     def start
-      @thread[:paused] = false
+      @thread = create_thread
     end
 
     def stop
-      @thread[:paused] = true
+      return false unless @thread
+
+      # just to make sure we don't leave any notes hanging...
+      @thread[:notes].each do |note|
+        note = note[:data]
+        note_off(note)
+      end
+
+      Thread.kill(@thread)
     end
 
     def set_notes(notes)
+      @notes = notes
       @thread[:notes] = notes
+    end
+
+    def note_on(note)
+      @output.puts(0x90, note[1], note[2])
+    end
+
+    def note_off(note)
+      @output.puts(0x80, note[1], note[2])
     end
 
     private
 
     def create_thread
       Thread.new do
-        begin
-          Thread.current[:bpm] = @bpm
-          Thread.current[:notes] = @notes
-          Thread.current[:paused] = true
+        Thread.current[:bpm] = @bpm
+        Thread.current[:notes] = @notes
+        Thread.current[:delay] ||= 0.2
 
-          loop do
-            continue if Thread.current[:paused]
-            puts "woot"
-
-            Thread.current[:notes].each do |note|
-              @output.puts(0x90, note[1], note[2])
-              puts "Out: #{note}"
-
-              sleep(Thread.current[:delay])
-
-              @output.puts(0x80, note[1], note[2])
-            end
+        loop do
+          Thread.current[:notes].each do |note|
+            note = note[:data]
+            note_on(note)
+            sleep(Thread.current[:delay])
+            note_off(note)
           end
-        rescue e
-          puts "DANGER DANGER"
-          puts e
         end
       end
     end

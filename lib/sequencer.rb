@@ -32,8 +32,8 @@ class Sequencer
 
   def stop_recording
     @notes = @reader.stop
-    @clock.set_notes(@notes)
     @clock.start
+    @clock.set_notes(@notes)
   end
 end
 
