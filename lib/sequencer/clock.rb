@@ -29,6 +29,11 @@ class Sequencer
       @thread[:notes] = notes
     end
 
+    def set_bpm(bpm)
+      @bpm = bpm
+      @thread[:bpm] = @bpm if @thread
+    end
+
     def note_on(note)
       @output.puts(0x90, note[1], note[2])
     end
@@ -43,13 +48,12 @@ class Sequencer
       Thread.new do
         Thread.current[:bpm] = @bpm
         Thread.current[:notes] = @notes
-        Thread.current[:delay] ||= 0.2
 
         loop do
           Thread.current[:notes].each do |note|
             note = note[:data]
             note_on(note)
-            sleep(Thread.current[:delay])
+            sleep(60.0/Thread.current[:bpm])
             note_off(note)
           end
         end

@@ -10,20 +10,13 @@ class Sequencer
   def initialize
     @bpm = 120
     @notes = []
-    @clock = Clock.new(notes: @notes)
+    @clock = Clock.new(notes: @notes, bpm: @bpm)
     @recording = true
     @reader = Reader.new
 
     start_recording
     
     start_gui
-
-    # main loop!
-    #loop do
-    #  puts "Recording: #{@recording}"
-    #  gets
-    #  toggle_recording
-    #end
   end
 
   def toggle_recording

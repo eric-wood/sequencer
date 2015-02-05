@@ -72,9 +72,11 @@ class Sequencer
     def handle_input(input)
       case input
       when Curses::Key::UP
-        @bpm += 1
+        @bpm += 10
+        @clock.set_bpm(@bpm)
       when Curses::Key::DOWN
-        @bpm -= 1
+        @bpm -= 10
+        @clock.set_bpm(@bpm)
       when ' '
         toggle_recording
       when 'q'
