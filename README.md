@@ -2,6 +2,8 @@
 
 A simple little MIDI sequencer to keep Eric from buying more music equipment he doesn't need.
 
+I guess technically this is an arpeggiator, but whatever, I don't want to rename the project.
+
 (why spend money on it if you can build it yourself?)
 
 ### Objective
@@ -19,15 +21,27 @@ Here's an [example](http://youtu.be/Rl28UCNWSig?t=39s) of the concept I'm going 
 
 ### Running it
 
-[Shoes](http://shoesrb.com/) is kinda weird about stuff in its current JRuby stage and requires that nifty little helper program to run.
+If you don't have bundler installed: ```gem install bundler```
 
-Give this a shot:
+Then run ```bundle install``` to make sure you've got all the dependencies installed (don't worry, there's like only one)
+
+Boom:
 
 ```bash
-shoes bin/sequencer.rb
+ruby lib/sequencer.rb
 ```
 
 That's it!
+
+### How do I actually *use* it?
+
+Easy.
+
+In recording mode (when it says "RECORDING") you hit a few notes.
+
+* Space: toggle between playback and recording modes
+* Arrow keys: adjust tempo
+* q: quit, gracefully?
 
 ### More info
 
