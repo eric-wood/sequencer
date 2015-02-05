@@ -20,6 +20,7 @@ class Sequencer
         note_off(note)
       end
 
+      @notes = []
       Thread.kill(@thread)
     end
 
